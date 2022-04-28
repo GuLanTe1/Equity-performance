@@ -1,0 +1,365 @@
+---
+title: "The Social Identity of Canadians Regarding Their Self-rated Health"
+subtitle: "General and Mental Health Focuses"
+author: 
+  - Xiangyu Wang
+thanks: "Code and data are available at:https://github.com/GuLanTe1/GSS-Social-Identity."
+date: "`r format(Sys.time(), '%d %B %Y')`"
+abstract: "O Canada! Our home and native land! True patriot love, in all of us command. With glowing hearts we see thee rise, The True North strong and free! The optimism and politeness of Canadians and the country's passion for immigration have made this great and free Northland. This paper uses the data from the social identity part of the 2013 Canadian General Social Survey to analyze the social identity of Canadians regarding their General Self-rated Health. Over 80% of Canadians feel pride in Canada's democracy, economic achievements, health care system, social safety system, and being Canadian. And over 85% of Canadians feel at least to a moderate extent that Canadian have shared great values in respecting human rights, laws, gender quality, official languages, ethnic or cultural diversity, and aboriginal culture. Canadians' pride and values also positively correlated with their self-rated health and mental health, with a higher sense of pride and values identification improving self-rated health and mental health scores. "
+keywords: "Pride, Shared values, Self-rated health, Self-rated mental health"
+output:
+  bookdown::pdf_document2: default
+---
+
+
+
+```{r,echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2)
+library(scales)
+library(modelsummary)
+data=read.csv("AAYrocL3.csv")
+```
+\newpage
+# Introduction
+This GSS was collected through both telephone interviews and electronic questionnaires with the target population, which is defined as 'non-institutionalized person reserves 15 years of age or older among 10 provinces of Canada (General Social Survey 2013).
+
+By performing histogram visualization analysis and building multiple linear regression models based on collected data, the study observed that one positive unit change in most pride and value score could improve self-rated health and mental health from 1% up to 4.3%. Moreover, self-rated health and mental health are even more heavily and positively correlated with each other, with 1 unit change of the one can affect the other by at least 0.63 units. 
+
+This finding potentially tells us how to advise policymakers to develop valid policies on Canadians' feelings of pride and values to improve the quality of life for Canadians by maximizing their self-rated health and mental health.
+
+\newpage
+
+# Data
+
+In this study, Rstudio was used as the analyzing tool alongside with support of 'ggplot2', 'scales,' and 'modelsummary' package to bring the study possible. The dataset is from General Social Survey 2013, and a total of 13 variables were used in the study. These 13 variables can be divided into the quantitative measurement of Canadians' pride, values, and self-rated score. Each category has its unique component, such as pride in democracy, values in gender equality, self-rated general score, mental score, etc. Furthermore, these variables are ranged from 1 to 7 or 1 to 10; a higher score in each component means a lower rating for this topic, indicating the respondents are not satisfied with their experiences in this particular component. 
+
+Great examples of what the original data look like are Figure \@ref(fig:Fig1) and Figure \@ref(fig:Fig6).
+
+
+\newpage
+
+
+# Result
+
+Overall, in terms of pride and values, more than 80% of respondents responded positively, which is a solid assumption I made for the modeling experiment: Canadians' self-evaluation is directly proportional to their pride and values. Multiple linear regressions were used in relations between Canadians' pride, values, and self-rated scale, and they proved that Canadians' self-evaluation is positively correlated to their pride and values. The models can numerically be interpreted as one positive unit change in most pride and value score that could improve self-rated health and mental health from 1% to 4.3%. Moreover, self-rated health and mental health are even more heavily and positively correlated with each other, with 1 unit change of the one can affect the other by at least 0.63 units.
+
+```{r Fig1, fig.cap="Survey respondents' Pride - Being Canadian",fig.dim = c(4, 3)}
+# Plot 1st graph, pride - Being Canadian
+pride=as.data.frame(table(data$prd_10))
+pride= pride[-c(7,8,9),]
+names(pride)=c("Extent","Counts")
+ggplot(data=pride,mapping=aes(x=Extent,y=Counts,fill=Extent,label=scales::percent(Counts)))+
+  geom_col(aes(x=Extent, y = after_stat(pride$Counts/sum(pride$Counts))))+
+  scale_x_discrete(labels=c("Very proud","Proud","Somewhat proud","Not very proud","Not proud at all","No opinion"))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5))+ 
+  theme(legend.position = "none")+
+  labs( title = "")+
+  scale_y_continuous(labels = scales::percent,
+                     breaks = scales::pretty_breaks(n = 8))
+```
+
+
+
+```{r Fig2, fig.cap="Survey respondents' Pride - Democracy",fig.dim = c(4, 3)}
+# Plot 2nd graph, pride - Democracy
+pride_2=as.data.frame(table(data$prd_20))
+pride_2= pride_2[-c(7,8),]
+names(pride_2)=c("Extent","Counts")
+ggplot(data=pride_2,mapping=aes(x=Extent,y=Counts,fill=Extent,label=scales::percent(Counts)))+
+  geom_col(aes(x=Extent, y = after_stat(pride_2$Counts/sum(pride_2$Counts))))+
+  scale_x_discrete(labels=c("Very proud","Proud","Somewhat proud","Not very proud","Not proud at all","No opinion"))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5))+ 
+  theme(legend.position = "none")+
+  labs( title = "")+
+  scale_y_continuous(labels = scales::percent,
+                     breaks = scales::pretty_breaks(n = 8))
+```
+
+
+Over 60% of respondents are very proud of being Canadian, and over 35% feel at least somewhat proud of being Canadian. Overall, the majority of respondents are proud of being Canadian.
+
+
+```{r Fig3, fig.cap="Survey respondents' Pride - Economic achievements",fig.dim = c(4, 3)}
+# Plot 3rd graph, pride - Economic achievements
+pride_3=as.data.frame(table(data$prd_30))
+pride_3= pride_3[-c(7,8),]
+names(pride_3)=c("Extent","Counts")
+ggplot(data=pride_3,mapping=aes(x=Extent,y=Counts,fill=Extent,label=scales::percent(Counts)))+
+  geom_col(aes(x=Extent, y = after_stat(pride_3$Counts/sum(pride_3$Counts))))+
+  scale_x_discrete(labels=c("Very proud","Proud","Somewhat proud","Not very proud","Not proud at all","No opinion"))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5))+ 
+  theme(legend.position = "none")+
+  labs( title = "")+
+  scale_y_continuous(labels = scales::percent,
+                     breaks = scales::pretty_breaks(n = 8))
+```
+
+```{r Fig4, fig.cap="Survey respondents' Pride - Health care system",fig.dim = c(4, 3)}
+# Plot 4th graph, pride - Health care system
+pride_4=as.data.frame(table(data$prd_35))
+pride_4= pride_4[-c(7,8),]
+names(pride_4)=c("Extent","Counts")
+ggplot(data=pride_4,mapping=aes(x=Extent,y=Counts,fill=Extent,label=scales::percent(Counts)))+
+  geom_col(aes(x=Extent, y = after_stat(pride_4$Counts/sum(pride_4$Counts))))+
+  scale_x_discrete(labels=c("Very proud","Proud","Somewhat proud","Not very proud","Not proud at all","No opinion"))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5))+ 
+  theme(legend.position = "none")+
+  labs( title = "")+
+  scale_y_continuous(labels = scales::percent,
+                     breaks = scales::pretty_breaks(n = 8))
+```
+
+
+```{r Fig5, fig.cap="Survey respondents' Pride - Social security system",fig.dim = c(4, 3)}
+# Plot 5th graph, pride - Social security system
+pride_5=as.data.frame(table(data$prd_37))
+pride_5= pride_5[-c(7,8),]
+names(pride_5)=c("Extent","Counts")
+ggplot(data=pride_5,mapping=aes(x=Extent,y=Counts,fill=Extent,label=scales::percent(Counts)))+
+  geom_col(aes(x=Extent, y = after_stat(pride_5$Counts/sum(pride_5$Counts))))+
+  scale_x_discrete(labels=c("Very proud","Proud","Somewhat proud","Not very proud","Not proud at all","No opinion"))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5))+ 
+  theme(legend.position = "none")+
+  labs( title = "")+
+  scale_y_continuous(labels = scales::percent,
+                     breaks = scales::pretty_breaks(n = 8))
+```
+
+
+However, as can be seen in the graph below, Canadians' very proud level of the social security system has dropped sharply, showing that Canadians' satisfaction with the existing social security system is lower compares to other components in the Pride category.
+
+
+```{r Fig6, fig.cap="Survey respondents' shared values - Human rights",fig.dim = c(4, 3)}
+# Plot 6th graph,shared values - Human rights
+value=as.data.frame(table(data$svr_10))
+value= value[-c(5,6),]
+names(value)=c("Extent","Counts")
+ggplot(data=value,mapping=aes(x=Extent,y=Counts,fill=Extent,label=scales::percent(Counts)))+
+  geom_col(aes(x=Extent, y = after_stat(value$Counts/sum(value$Counts))))+
+  scale_x_discrete(labels=c("To a great extent","To a moderate extent","To a small extent","NNot at all"))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5))+ 
+  theme(legend.position = "none")+
+  labs( title = "")+
+  scale_y_continuous(labels = scales::percent,
+                     breaks = scales::pretty_breaks(n = 8))
+```
+
+
+```{r Fig7, fig.cap="Survey respondents' shared values - Respect for the law",fig.dim = c(4, 3)}
+# Plot 7th graph,shared values - Respect for the law
+value_2=as.data.frame(table(data$svr_25))
+value_2= value_2[-c(5,6),]
+names(value_2)=c("Extent","Counts")
+ggplot(data=value_2,mapping=aes(x=Extent,y=Counts,fill=Extent,label=scales::percent(Counts)))+
+  geom_col(aes(x=Extent, y = after_stat(value_2$Counts/sum(value_2$Counts))))+
+  scale_x_discrete(labels=c("To a great extent","To a moderate extent","To a small extent","NNot at all"))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5))+ 
+  theme(legend.position = "none")+
+  labs( title = "")+
+  scale_y_continuous(labels = scales::percent,
+                     breaks = scales::pretty_breaks(n = 8))
+```
+
+```{r Fig8, fig.cap="Survey respondents' shared values - Gender equality",fig.dim = c(4, 3)}
+# Plot 8th graph,shared values - Gender equality
+value_3=as.data.frame(table(data$svr_30))
+value_3= value_3[-c(5,6),]
+names(value_3)=c("Extent","Counts")
+ggplot(data=value_3,mapping=aes(x=Extent,y=Counts,fill=Extent,label=scales::percent(Counts)))+
+  geom_col(aes(x=Extent, y = after_stat(value_3$Counts/sum(value_3$Counts))))+
+  scale_x_discrete(labels=c("To a great extent","To a moderate extent","To a small extent","NNot at all"))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5))+ 
+  theme(legend.position = "none")+
+  labs( title = "")+
+  scale_y_continuous(labels = scales::percent,
+                     breaks = scales::pretty_breaks(n = 8))
+```
+
+
+```{r Fig9, fig.cap="Survey respondents' shared values - Official languages",fig.dim = c(4, 3)}
+# Plot 9th graph,shared values - Official languages
+value_4=as.data.frame(table(data$svr_35))
+value_4= value_4[-c(5,6),]
+names(value_4)=c("Extent","Counts")
+ggplot(data=value_4,mapping=aes(x=Extent,y=Counts,fill=Extent,label=scales::percent(Counts)))+
+  geom_col(aes(x=Extent, y = after_stat(value_4$Counts/sum(value_4$Counts))))+
+  scale_x_discrete(labels=c("To a great extent","To a moderate extent","To a small extent","NNot at all"))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5))+ 
+  theme(legend.position = "none")+
+  labs( title = "")+
+  scale_y_continuous(labels = scales::percent,
+                     breaks = scales::pretty_breaks(n = 8))
+```
+
+```{r Fig10, fig.cap="Survey respondents' shared values - Ethnic and cultural diversity",fig.dim = c(4, 3)}
+# Plot 10th graph,shared values - Ethnic and cultural diversity
+value_5=as.data.frame(table(data$svr_40))
+value_5= value_5[-c(5,6),]
+names(value_5)=c("Extent","Counts")
+ggplot(data=value_5,mapping=aes(x=Extent,y=Counts,fill=Extent,label=scales::percent(Counts)))+
+  geom_col(aes(x=Extent, y = after_stat(value_5$Counts/sum(value_5$Counts))))+
+  scale_x_discrete(labels=c("To a great extent","To a moderate extent","To a small extent","NNot at all"))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5))+ 
+  theme(legend.position = "none")+
+  labs( title = "")+
+  scale_y_continuous(labels = scales::percent,
+                     breaks = scales::pretty_breaks(n = 8))
+
+
+```
+
+```{r Fig11, fig.cap="Survey respondents' shared values - Respect for Aboriginal culture",fig.dim = c(4, 3)}
+# Plot 11th graph,shared values - Respect for Aboriginal culture
+value_6=as.data.frame(table(data$svr_45))
+value_6= value_6[-c(5,6),]
+names(value_6)=c("Extent","Counts")
+ggplot(data=value_6,mapping=aes(x=Extent,y=Counts,fill=Extent,label=scales::percent(Counts)))+
+  geom_col(aes(x=Extent, y = after_stat(value_6$Counts/sum(value_6$Counts))))+
+  scale_x_discrete(labels=c("To a great extent","To a moderate extent","To a small extent","NNot at all"))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5))+ 
+  theme(legend.position = "none")+
+  labs( title = "")+
+  scale_y_continuous(labels = scales::percent,
+                     breaks = scales::pretty_breaks(n = 8))
+```
+
+\newpage
+
+# Model
+
+Model 1 is best seleted model with from 3 different models using function 'modelsummary',  specific results of selection process can be found in Table\@ref(tab:tab1). 
+
+This model uses Self-rated general health as the prediction outcome and Self-rated mental health and Pride category as input variables. The model summary suggests that as self-rated mental health increases by 1 unit, the self-rated general health will increase by 0.685 unit. Pride variables have very little influence on self-rated general health even though 'prd_10', Being Canadian and 'prd_37', Social security system has a negative effect on Self-rated general health as these two value growth.
+```{r}
+
+lm_prode_general = lm(srh_110 ~  prd_10  + prd_20 + prd_30 + prd_35 + prd_37, data = data)
+lm_prode_general_2 = lm(srh_110 ~  prd_20 + prd_30, data = data)
+lm_prode_general_3 = lm(srh_110 ~  srh_115+prd_10  + prd_20 + prd_30 + prd_35 + prd_37, data = data)
+
+summary(lm_prode_general_3)$coefficient
+```
+
+Model 2 uses Self-rated mental health as the prediction outcome and Self-rated general health and Pride category as input variables. The model summary suggests that as self-rated general health increases by 1 unit, the self-rated mental health will increase by 0.641 unit. Pride variables again also have very little influence on self-rated mental health.
+
+Model 2 selection process and decided by least AIC and BIC can be found in Table\@ref(tab:tab2). 
+```{r} 
+lm_prode_mental = lm(srh_115 ~ prd_10  + prd_20 + prd_30 + prd_35 + prd_37, data = data)
+lm_prode_mental_2 = lm(srh_115 ~ prd_20 + prd_30, data = data)
+lm_prode_mental_3 = lm(srh_115 ~ srh_110+prd_20 + prd_30, data = data)
+
+summary(lm_prode_mental_3)$coefficient
+```
+
+Model 3 uses Self-rated general health as the prediction outcome and Self-rated mental health and Value category as input variables.
+The model summary suggests that as self-rated mental health increases by 1 unit, the self-rated general health will increase by 0.677 unit. Value variables again also have very little influence on self-rated mental health.
+
+Model 3 selection process and decided by least AIC and BIC can be found in Table\@ref(tab:tab3). 
+```{r}
+lm_value_general = lm(srh_110 ~  svr_10  + svr_25 + svr_30 + svr_35 + svr_40 +svr_45, data = data)
+lm_value_general_2 = lm(srh_110 ~ svr_10  + svr_25 + svr_30 +  svr_40, data = data)
+lm_value_general_3 = lm(srh_110 ~  srh_115 + svr_10  + svr_25 + svr_30 +  svr_40, data = data)
+
+summary(lm_value_general_3)$coefficient
+```
+
+Model 4 uses Self-rated mental health as the prediction outcome and Self-rated general health and Value category as input variables.
+The model summary suggests that as self-rated general health increases by 1 unit, the self-rated mental health will increase by 0.636 unit. Value variables again also have very little influence on self-rated mental health.
+
+Model 4 selection process and decided by least AIC and BIC can be found in Table\@ref(tab:tab4). 
+```{r}
+lm_value_mental= lm(srh_115 ~ svr_10  + svr_25 + svr_30 + svr_35 + svr_40 +svr_45, data = data)
+lm_value_mental_2= lm(srh_115 ~ svr_10  + svr_25 + svr_30, data = data)
+lm_value_mental_3 = lm(srh_115 ~ srh_110 + svr_10  + svr_25 + svr_30, data = data)
+
+summary(lm_value_mental_3)$coefficient
+```
+
+
+\newpage
+
+
+
+# Discussion
+This study carried out a large number of histograms and multiple linear regression modeling. The study found that respondents who are proud of Canada in all aspects and identify with Canadian values generally have higher self-rated general and mental health, indicating that general optimism about life improves Canadians' overall quality of life and ratings. Respondents who viewed values too negatively or disagreed with Pride in Canada tended to rate their life lower as well.
+
+There are many valuable variables in the GSS 2013 database that can be studied in this project. Still, considering the time constraints and the scale of the study, only 13 variables were selected from GSS 2013 to study the self-rating of Canadians, which will be one of the limitations and weaknesses of this study.
+
+The GSS 2013 Social Identity Dataset also includes variables such as Internet usage, friends, neighbors, social activities, etc., that can affect self-rating. It is hoped that these variables can be added to modeling and analysis in future research.
+
+\newpage
+
+
+# Appendix
+\newpage
+
+```{r tab1,tab.dim = c(4,3)}
+modelsummary(list(lm_prode_general,
+                  lm_prode_general_2,
+                  lm_prode_general_3),
+             fmt = 2,
+             title = "Explaining self-rated general health compare to self rated mental health and other variables ")
+
+
+```
+
+```{r tab2} 
+modelsummary(list(lm_prode_mental,
+                  lm_prode_mental_2,
+                  lm_prode_mental_3),
+             fmt = 2,
+             title = "Explaining self-rated general health compare to self rated mental health and other variables ")
+
+```
+
+```{r tab3}
+modelsummary(list(lm_value_general,
+                  lm_value_general_2,
+                  lm_value_general_3),
+             fmt = 2,
+             title = "Explaining self-rated general health compare to self rated mental health and other variables ")
+```
+
+```{r tab4}
+modelsummary(list(lm_value_mental,
+                  lm_value_mental_2,
+                  lm_value_mental_3),
+             fmt = 2,
+             title = "Explaining self-rated general health compare to self rated mental health and other variables ")
+```
+
+
+
+
+
+
+
+
+
+\newpage
+# Reference
+
+
+  Arel-Bundock V (2022). _modelsummary: Summary Tables and Plots for Statistical Models and Data: Beautiful,
+  Customizable, and Publication-Ready_. R package version 0.10.0,
+  <https://CRAN.R-project.org/package=modelsummary>.
+  
+  Government of Canada, Statistics Canada. “General Social Survey - Social Identity (SI).” Surveys and Statistical Programs, 22 Dec. 2014, https://www23.statcan.gc.ca/imdb/p2SV.pl?Function=getSurvey&amp;Id=139605.
+  
+  H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
+  
+  R Core Team (2022). R: A language and environment for statistical computing. R Foundation for Statistical Computing,
+  Vienna, Austria. URL https://www.R-project.org/.
+  
+  Statistics Canada. General Social Survey Cycle 27: Social Identity Public Use Microdata File Documentation and User’s Guide, http://sda.chass.utoronto.ca.myaccess.library.utoronto.ca/sdaweb/html/cchs.htm. 
+  
+  Wickham H, Seidel D (2022). _scales: Scale Functions for Visualization_. R package version 1.2.0,
+  <https://CRAN.R-project.org/package=scales>.
+  
+ 
+  
+  
+
+
+ 
+
